@@ -18,7 +18,10 @@ Welcome to WDL_document_zh's documentation!
    quick/quickstart
    quick/structure
    quick/variables
-   quick/plumbing   
+   quick/plumbing  
+   quick/validation
+   quick/inputs
+   quick/execution 
 
 .. toctree::
    :maxdepth: 2

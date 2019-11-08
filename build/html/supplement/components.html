@@ -86,6 +86,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../quick/structure.html">基础结构</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick/variables.html">添加变量</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick/plumbing.html">添加管道</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/validation.html">验证语法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/inputs.html">指定输入</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/execution.html">执行!</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorials:</span></p>
 <ul>
@@ -95,32 +98,41 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="plumbing_options.html">Plumbing Options</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Components</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#basename">basename()</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#call">call</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">用法示例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basename">basename()</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">基本用法:</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#command">command</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#call">call</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id2">用法示例</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#meta">meta</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#command">command</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id3">用法示例</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#output">output</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#meta">meta</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id4">用法示例</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#parameter-meta">parameter_meta</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#output">output</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id5">用法示例</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#runtime">runtime</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#task">task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameter-meta">parameter_meta</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">用法示例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#runtime">runtime</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">使用的例子</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#task">task</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">用法示例</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#variables">variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#workflow">workflow</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id6">用法示例</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">用法示例</a></li>
 </ul>
 </li>
 </ul>
@@ -193,14 +205,34 @@
 <h1>Components<a class="headerlink" href="#components" title="永久链接至标题">¶</a></h1>
 <div class="section" id="basename">
 <h2>basename()<a class="headerlink" href="#basename" title="永久链接至标题">¶</a></h2>
+<p>这个WDL函数允许你根据另一个文件名来命名一个输出文件，例如输入文件名。给它一个文件会去掉路径，只生成文件名(作为字符串)。如果您还给它一个字符串作为次要参数，该函数将尝试从文件名的末尾去掉该字符串，然后返回剩下的内容。</p>
+<p>这是超级方便剥离一个文件扩展名，并取代它与其他东西，当你想要例如命名一个任务的输出文件基于一个输入文件名。</p>
+<div class="section" id="id1">
+<h3>基本用法:<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h3>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">File</span> <span class="n">input_file</span> <span class="o">=</span> <span class="s2">&quot;/Users/chris/input.bam&quot;</span>
+<span class="n">String</span> <span class="n">base</span> <span class="o">=</span> <span class="n">basename</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>这产生input.bam。</p>
+<p>提供一个后缀字符串:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">File</span> <span class="n">input_file</span> <span class="o">=</span> <span class="s2">&quot;/Users/chris/input.bam&quot;</span>
+<span class="n">String</span> <span class="n">stripped</span> <span class="o">=</span> <span class="n">basename</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s2">&quot;.bam&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>这将生成输入，然后可以将其与新的后缀字符串组合以生成所需的输出文件名。</p>
+</div>
 </div>
 <div class="section" id="call">
 <h2>call<a class="headerlink" href="#call" title="永久链接至标题">¶</a></h2>
 <p>call组件在工作流主体中用于指定应该执行的特定任务。在最简单的形式中，调用只需要一个任务名称。</p>
 <p>我们还可以添加一个代码块来指定任务的输入变量。我们还可以修改call语句来调用别名下的任务，这允许在相同的工作流中使用不同的参数多次运行相同的task。这使得重用代码非常容易;这在实践中是如何工作的，将在快速入门指南的管道选项部分详细解释。</p>
 <p>请注意，call语句的执行顺序并不取决于它们在脚本中出现的顺序;相反，它是基于任务调用之间的依赖关系图来确定的。这意味着程序通过评估任务调用的输入是其他任务调用的输出来推断任务调用的顺序。这也将在管道选项一节中详细解释。</p>
-<div class="section" id="id1">
-<h3>用法示例<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h3>
+<div class="section" id="id2">
+<h3>用法示例<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># in its simplest form</span>
 <span class="n">call</span> <span class="n">my_task</span>
@@ -223,8 +255,8 @@
 <div class="section" id="command">
 <h2>command<a class="headerlink" href="#command" title="永久链接至标题">¶</a></h2>
 <p>command组件是任务所需的属性。command块的主体用占位符(例如${input_file})指定要运行的文字命令行(基本上是可以在终端shell中运行的任何命令)，这些占位符用于需要填充的命令行变量部分。注意，必须在任务输入定义中定义所有变量占位符。</p>
-<div class="section" id="id2">
-<h3>用法示例<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
+<div class="section" id="id3">
+<h3>用法示例<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>command {
     java -jar myExecutable.jar \
@@ -240,8 +272,8 @@
 <div class="section" id="meta">
 <h2>meta<a class="headerlink" href="#meta" title="永久链接至标题">¶</a></h2>
 <p>meta组件是任务的可选属性。它的目的是存储元数据，如任务的作者或联系人电子邮件。可以使用任何键/值对。</p>
-<div class="section" id="id3">
-<h3>用法示例<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
+<div class="section" id="id4">
+<h3>用法示例<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">meta</span> <span class="p">{</span>
     <span class="n">author</span><span class="p">:</span> <span class="s2">&quot;Broad Institute DSDE&quot;</span>
@@ -259,8 +291,8 @@
 <li>从技术上讲，对于不生成在其他任何地方使用的输出的任务(如规范的“Hello World”示例)，不需要输出。但是这种情况非常少见，因为在大多数情况下，当您编写一个实际做一些有用的工作的工作流时，每个任务命令都会产生某种输出。否则，你为什么要运行它?</li>
 </ul>
 <p>WDL接受的所有类型的变量都可以包括在这里。输出定义必须包含显式类型声明。</p>
-<div class="section" id="id4">
-<h3>用法示例<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
+<div class="section" id="id5">
+<h3>用法示例<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h3>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="p">{</span>
     <span class="n">File</span> <span class="n">out</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="si">{output_basename}</span><span class="s2">.txt&quot;</span>
@@ -274,8 +306,8 @@
 <div class="section" id="parameter-meta">
 <h2>parameter_meta<a class="headerlink" href="#parameter-meta" title="永久链接至标题">¶</a></h2>
 <p>parameter_meta组件是任务的可选属性。它用于存储任务命令中使用的输入参数和参数的描述，如果变量名不够描述性，这将非常有用。本节中的任何项(即input_file)都必须出现在命令行中。</p>
-<div class="section" id="id5">
-<h3>用法示例<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h3>
+<div class="section" id="id6">
+<h3>用法示例<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h3>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">parameter_meta</span> <span class="p">{</span>
     <span class="n">input_file</span><span class="p">:</span> <span class="s2">&quot;the BAM file to process&quot;</span>
@@ -289,18 +321,148 @@
 </div>
 <div class="section" id="runtime">
 <h2>runtime<a class="headerlink" href="#runtime" title="永久链接至标题">¶</a></h2>
+<p>runtime组件是任务的可选属性。它可用于通过键/值对指定环境参数。这些值可以任意设置，但是后端负责解释这些值。Cromwell目前支持三个后端，local, JES和SGE，它们解释了以下runtime属性:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="53%" />
+<col width="20%" />
+<col width="15%" />
+<col width="13%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Runtime Attribute</th>
+<th class="head">LOCAL</th>
+<th class="head">JES</th>
+<th class="head">SGE</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>continueOnReturnCode</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+</tr>
+<tr class="row-odd"><td>cpu</td>
+<td>&#160;</td>
+<td>x</td>
+<td>x</td>
+</tr>
+<tr class="row-even"><td>disks</td>
+<td>&#160;</td>
+<td>x</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>zones</td>
+<td>&#160;</td>
+<td>x</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>docker</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+</tr>
+<tr class="row-odd"><td>failOnStderr</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+</tr>
+<tr class="row-even"><td>memory</td>
+<td>&#160;</td>
+<td>x</td>
+<td>x</td>
+</tr>
+<tr class="row-odd"><td>preemptible</td>
+<td>&#160;</td>
+<td>x</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>bootDiskSizeGb</td>
+<td>&#160;</td>
+<td>x</td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+<p>注意，有两个特殊的保留键:</p>
+<ul class="simple">
+<li>docker 要在其上运行任务命令的Docker映像。虽然一般情况下不需要它，但它在云执行服务等上下文中非常有用。例如，如果您计划使用Java执行服务运行Cromwell，则需要使用Docker映像。有关如何生成Docker映像的信息，请阅读本指南。</li>
+<li>memory 任务的内存需求。这应该是一个带后缀的整数值，比如B、KB、MB或二进制后缀KiB、MiB等等。请注意，如果在本地机器(如笔记本电脑)上运行，克伦威尔将不支持此参数。</li>
+</ul>
+<div class="section" id="id7">
+<h3>使用的例子<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h3>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">runtime</span> <span class="p">{</span>
+    <span class="n">docker</span><span class="p">:</span> <span class="s2">&quot;organization/myImage&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>WDL规范中的更多细节</p>
+</div>
 </div>
 <div class="section" id="task">
 <h2>task<a class="headerlink" href="#task" title="永久链接至标题">¶</a></h2>
+<p>task组件是WDL脚本的顶级组件。它包含“做某事”所需的所有信息，这些信息围绕着一个命令，该命令附带输入文件和参数的定义，以及输出组件中输出的显式标识。还可以使用runtime、meta和parameter_meta组件为其提供附加(可选)属性。</p>
+<p>任务在workflow命令中被“调用”，这是在运行脚本时执行它们的原因。同一个任务可以在同一个工作流中使用不同的参数多次运行，这使得重用代码变得非常容易。这在实践中是如何工作的，将在管道选项一节中详细解释。</p>
+<div class="section" id="id8">
+<h3>用法示例<a class="headerlink" href="#id8" title="永久链接至标题">¶</a></h3>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="n">my_task</span> <span class="p">{</span>
+    <span class="p">[</span> <span class="nb">input</span> <span class="n">definitions</span> <span class="p">]</span>
+    <span class="n">command</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+    <span class="n">output</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>WDL规范中的更多细节</p>
+</div>
 </div>
 <div class="section" id="variables">
 <h2>variables<a class="headerlink" href="#variables" title="永久链接至标题">¶</a></h2>
+<p>注意，这在技术上不是一个正式的WDL组件，比如任务或工作流，因为在WDL规范中没有命名为变量的实体。为了简化文档，我们将变量作为一个组进行讨论，并将它们与适当的组件放在一起。我们当然希望这不会适得其反，反而让大家更加困惑。</p>
+<p>与大多数编程语言一样，WDL区分了5种基本类型的变量，也称为基本类型:</p>
+<ul class="simple">
+<li>String : 一系列字母数字字符;通常用于存储(短)文本、文件名或在基因组学中存储DNA序列等信息。</li>
+<li>Float :  一个十进制数;例如3.1459(也可以是负数)。</li>
+<li>Int : 一个整数;例如16(也可以是负数)。</li>
+<li>Boolean : 表示二进制值的逻辑元素;例如真或假。</li>
+<li>File :  表示文件的对象，它与文件名本身有一点不同。</li>
+</ul>
+<p>这些基本类型可以分为更复杂的数据结构，也称为复合类型:</p>
+<ul class="simple">
+<li>Array :  按索引位置存储、排序和检索的元素列表;例如[A,B,C,D]是一个字符串数组或数组[String]，我们可以通过选择第二个元素来选择B元素(索引位置1，因为WDL数组是0索引的)。</li>
+<li>Map :  键值对列表;例如{“color”: “blue”， “size”: “large”}是字符串到字符串的映射，或者映射[String, String]，在这里我们可以询问对象的颜色。</li>
+<li>Object : 这个有点奇怪，不常用，所以请参阅规范了解更多信息。</li>
+</ul>
+<p>您可以在任务本身或工作流中声明变量，使用以下语法:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Type</span> <span class="n">variableName</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>有时，您可能不希望每次调用任务时都使用变量。要使变量成为可选的(这意味着您不需要在JSON输入文件或工作流调用中设置值)，只需添加?修饰符*,像这样:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Type? variableName
+</pre></div>
+</div>
+</div></blockquote>
+<p>注意，你也可以看到?在类型旁边使用一个空格的修饰符，像这样: Type ? variableName . 这两种格式目前都是允许的(直到 Cromwell v24)，但额外的空间可能在未来的版本中被禁止。</p>
+<p>在命令中使用可选变量时，可以指定默认值。这告诉执行引擎，“如果我没有为这个变量提供我自己的值，那么就使用这个默认值。” 它的语法是:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>${default=&quot;value&quot; variableName}
+</pre></div>
+</div>
+</div></blockquote>
+<p>此时，不可能在工作流级别使用可选变量。</p>
+<p>WDL规范中的更多细节</p>
 </div>
 <div class="section" id="workflow">
 <h2>workflow<a class="headerlink" href="#workflow" title="永久链接至标题">¶</a></h2>
 <p>工作流组件是WDL脚本所需的顶级组件。它包含调用任务组件的调用语句，以及工作流级别的输入定义。可以通过调用和其他语句将各种任务链接在一起;这些都在管道选项文档中有详细说明。</p>
-<div class="section" id="id6">
-<h3>用法示例<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h3>
+<div class="section" id="id9">
+<h3>用法示例<a class="headerlink" href="#id9" title="永久链接至标题">¶</a></h3>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">workflow</span> <span class="n">myWorkflowName</span> <span class="p">{</span>
     <span class="n">call</span> <span class="n">my_task</span>

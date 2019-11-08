@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>快速开始 &mdash; WDL_document_zh 0.1.1 文档</title>
+  <title>验证语法 &mdash; WDL_document_zh 0.1.1 文档</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" />
-    <link rel="next" title="基础结构" href="structure.html" />
-    <link rel="prev" title="Welcome to WDL_document_zh’s documentation!" href="../index.html" /> 
+    <link rel="next" title="指定输入" href="inputs.html" />
+    <link rel="prev" title="添加管道" href="plumbing.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,19 +83,14 @@
             
               <p class="caption"><span class="caption-text">WDL User Guide:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">快速开始</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#wdl">编写WDL工作流</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">运行WDL工作流</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">你准备好了吗</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id4">你需要什么</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">基础结构</a></li>
 <li class="toctree-l1"><a class="reference internal" href="variables.html">添加变量</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plumbing.html">添加管道</a></li>
-<li class="toctree-l1"><a class="reference internal" href="validation.html">验证语法</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">验证语法</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-error-if-a-call-references-a-task-that-doesn-t-exist">Example: error if a call references a task that doesn’t exist:</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="inputs.html">指定输入</a></li>
 <li class="toctree-l1"><a class="reference internal" href="execution.html">执行!</a></li>
 </ul>
@@ -152,13 +147,13 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>快速开始</li>
+      <li>验证语法</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/quick/quickstart.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/quick/validation.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -171,32 +166,29 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="getstart-page">
-<span id="id1"></span><h1>快速开始<a class="headerlink" href="#getstart-page" title="永久链接至标题">¶</a></h1>
-<p>本节列出了开始编写和运行WDL工作流所需的所有知识，这些工作流可以做一些有用的事情——就在今天.</p>
-<p>别担心，这比你想象的要简单。</p>
-<div class="section" id="wdl">
-<h2>编写WDL工作流<a class="headerlink" href="#wdl" title="永久链接至标题">¶</a></h2>
-<p>首先，我们将介绍WDL的构建块以及它们如何组合在一起形成WDL脚本的基本结构。然后，我们将展示如何添加变量，以便可以在脚本本身之外指定输入文件和参数，这将允许您在不同的运行中使用相同的脚本而无需修改。接下来，我们将介绍如何添加管道(plumbing)，即如何将以不同方式执行工作单元的组件链接在一起，以形成复杂的管道(pipelines)。最后，我们将讨论如何验证语法，这听起来很枯燥，但是很有帮助，因为它可以快速地告诉您WDL脚本是否可以运行。因为没人喜欢一开始跑步就失败，因为某个地方少了一个分号。</p>
-<p>Base Structure     Add Variables    Add Plumbing    Validate Syntax
-基本结构    添加变量    添加管道    验证语法</p>
+  <div class="section" id="id1">
+<h1>验证语法<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>没有人喜欢启动一堆工作后，从午餐回来后发现，由于脚本中的语法错误，它们都在几分钟内失败。Missing bracket, schmacket.</p>
+<p>好消息是WDL附带了一个名为wdltool的实用工具工具包，其中包含一个语法验证函数。获取和运行wdltool可执行文件的说明在这里(但是现在不要担心它——在安装所需的所有内容时，我们将再次提供该链接)。</p>
+<p>为了验证我们的WDL语法，我们只需在脚本中调用validate函数:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ java -jar wdltool.jar validate myWorkflow.wdl
+</pre></div>
 </div>
-<div class="section" id="id2">
-<h2>运行WDL工作流<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
-<p>这将是短暂而甜蜜的。我们将向您展示如何生成指定输入的JSON模板(剧透:这非常简单)并将其填满. 然后我们将介绍执行WDL脚本的主要选项，重点介绍我们在自己的工作中使用的执行引擎，即Cromwell。如果你在两年前问我们是否会有一个执行引擎，我们可以在开发和生产中使用，在本地和云端，我们会说当猪会飞…</p>
-<p>Specify Inputs    Execute!
-指定输入    执行引擎</p>
+</div></blockquote>
+<p>这个函数解析WDL脚本并警告我们任何语法错误，如缺少花括号、未定义变量、缺少逗号等。它将解析导入，但是注意，它不能识别错误，比如命令中的输入错误、指定错误的文件名或未能为工作流中运行的程序提供所需的输入。</p>
+<div class="section" id="example-error-if-a-call-references-a-task-that-doesn-t-exist">
+<h2>Example: error if a call references a task that doesn’t exist:<a class="headerlink" href="#example-error-if-a-call-references-a-task-that-doesn-t-exist" title="永久链接至标题">¶</a></h2>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ java -jar wdltool.jar validate myWorkflow.wdl
+ERROR: Call references a task (BADps) that doesn&#39;t exist (line 22, col 8)
+
+  call BADps
+       ^
+</pre></div>
 </div>
-<div class="section" id="id3">
-<h2>你准备好了吗<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
-<p>一旦您理解了编写和运行WDL工作流所涉及的核心概念，下一步就是亲自动手!在教程部分，我们提供了一系列完整的“build-a-WDL”示例，在这些示例中，我们将指导您完成演示WDL所有关键特性的组装工作流的每个步骤。为了获得最好的效果，按照教程页面上建议的顺序学习教程。</p>
-<p>对于更广泛的用例，您还可以浏览实际的工作流，这些工作流是处理实际分析问题的脚本，我们在自己的工作中使用它们。这包括用于外显体和全基因组变异发现的广泛基因组生产管道。</p>
-<div class="section" id="id4">
-<h3>你需要什么<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
-<p>下面是运行用WDL编写的工作流(使用Cromwell执行引擎，因为我们使用它)所需的基本需求/事项列表，以及必要的安装说明。因为我们在本网站的大多数教程和示例WDL脚本中都使用了GATK，所以我们还提供了一个到GATK安装说明的链接，但是如果您不打算运行GATK WDLs，这是可选的。</p>
-<p>有一些额外的资源可以帮助您使用WDL;有关完整列表，请参见工具箱页面。</p>
-<p><a class="reference external" href="https://software.broadinstitute.org/wdl/documentation/quickstart#install6671">获取和如何安装</a></p>
-</div>
+</div></blockquote>
+<p>一旦我们修复了任何语法错误，我们就几乎可以运行我们的脚本了!我们和执行之间只是一步之遥了。嗯。这有点令人担心，不是吗?也许我们可以换个说法?确定。离天堂只有一步之遥了。不，这并不好。好吧，在我们和一个良好编写的WDL脚本在我们首选的执行引擎上顺利运行之间只差一步。好的，我们继续。</p>
 </div>
 </div>
 
@@ -208,10 +200,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="structure.html" class="btn btn-neutral float-right" title="基础结构" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="inputs.html" class="btn btn-neutral float-right" title="指定输入" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to WDL_document_zh’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="plumbing.html" class="btn btn-neutral float-left" title="添加管道" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

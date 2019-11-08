@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>快速开始 &mdash; WDL_document_zh 0.1.1 文档</title>
+  <title>执行! &mdash; WDL_document_zh 0.1.1 文档</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" />
-    <link rel="next" title="基础结构" href="structure.html" />
-    <link rel="prev" title="Welcome to WDL_document_zh’s documentation!" href="../index.html" /> 
+    <link rel="next" title="WDL 教程" href="../tutorials/index.html" />
+    <link rel="prev" title="指定输入" href="inputs.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,21 +83,18 @@
             
               <p class="caption"><span class="caption-text">WDL User Guide:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">快速开始</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#wdl">编写WDL工作流</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">运行WDL工作流</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">你准备好了吗</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id4">你需要什么</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">快速开始</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">基础结构</a></li>
 <li class="toctree-l1"><a class="reference internal" href="variables.html">添加变量</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plumbing.html">添加管道</a></li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">验证语法</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inputs.html">指定输入</a></li>
-<li class="toctree-l1"><a class="reference internal" href="execution.html">执行!</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">执行!</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cromwell">Cromwell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cromwellwdl">Cromwell本地运行WDL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">在其他平台上运行</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorials:</span></p>
 <ul>
@@ -152,13 +149,13 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>快速开始</li>
+      <li>执行!</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/quick/quickstart.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/quick/execution.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -171,32 +168,43 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="getstart-page">
-<span id="id1"></span><h1>快速开始<a class="headerlink" href="#getstart-page" title="永久链接至标题">¶</a></h1>
-<p>本节列出了开始编写和运行WDL工作流所需的所有知识，这些工作流可以做一些有用的事情——就在今天.</p>
-<p>别担心，这比你想象的要简单。</p>
-<div class="section" id="wdl">
-<h2>编写WDL工作流<a class="headerlink" href="#wdl" title="永久链接至标题">¶</a></h2>
-<p>首先，我们将介绍WDL的构建块以及它们如何组合在一起形成WDL脚本的基本结构。然后，我们将展示如何添加变量，以便可以在脚本本身之外指定输入文件和参数，这将允许您在不同的运行中使用相同的脚本而无需修改。接下来，我们将介绍如何添加管道(plumbing)，即如何将以不同方式执行工作单元的组件链接在一起，以形成复杂的管道(pipelines)。最后，我们将讨论如何验证语法，这听起来很枯燥，但是很有帮助，因为它可以快速地告诉您WDL脚本是否可以运行。因为没人喜欢一开始跑步就失败，因为某个地方少了一个分号。</p>
-<p>Base Structure     Add Variables    Add Plumbing    Validate Syntax
-基本结构    添加变量    添加管道    验证语法</p>
+  <div class="section" id="id1">
+<h1>执行!<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>目前，Cromwell是我们所知道的唯一支持WDL的全功能执行引擎。</p>
+<div class="section" id="cromwell">
+<h2>Cromwell<a class="headerlink" href="#cromwell" title="永久链接至标题">¶</a></h2>
+<p>Cromwell是一个用Java编写的开源(BSD 3-clause)执行引擎，它支持在三种类型的平台上运行WDL: 本地机(例如您的笔记本电脑)、通过作业调度器(例如GridEngine)访问的本地集群/计算场或云平台(例如谷歌云或Amazon AWS)。</p>
+<img alt="../_images/execution1.png" src="../_images/execution1.png" />
+<p>它是以美国演员詹姆斯·克伦威尔(James Cromwell)的名字命名的，他是《宝贝》(Babe)和《星际迷航:第一次接触》(star Trek: First Contact)等伟大电影中的明星，因此它的吉祥物是“变形猪杰米”(Jamie the warp pig)。</p>
+<p>Cromwell可执行文件可以作为预编译的jar文件从Cromwell GitHub存储库中获得。它需要Java 8来运行。</p>
+<p>基本的命令语法如下:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">java</span> <span class="o">-</span><span class="n">jar</span> <span class="n">cromwell</span><span class="o">.</span><span class="n">jar</span> <span class="o">&lt;</span><span class="n">action</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">parameters</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>关于通过Cromwell运行WDLs的更详细的例子可以在WDL文档的教程部分找到。</p>
+</div>
+<div class="section" id="cromwellwdl">
+<h2>Cromwell本地运行WDL<a class="headerlink" href="#cromwellwdl" title="永久链接至标题">¶</a></h2>
+<p>在本地机器上运行是世界上最简单的事情。假设您已经验证了一个名为myWorkflow.wdl的WDL脚本和一个名为myWorkflow_inputs.json的输入JSON文件，您只需调用Cromwell的运行函数，如下所示:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">java</span> <span class="o">-</span><span class="n">jar</span> <span class="n">Cromwell</span><span class="o">.</span><span class="n">jar</span> <span class="n">run</span> <span class="n">myWorkflow</span><span class="o">.</span><span class="n">wdl</span> <span class="o">--</span><span class="n">inputs</span> <span class="n">myWorkflow_inputs</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>这将运行您的工作流。将看到来自Cromwell引擎将为你更新在它走过的步骤的信息。</p>
+<div class="admonition note">
+<p class="first admonition-title">注解</p>
+<p class="last">注意，通常由工具本身输出到终端的任何消息实际上都不会显示在运行脚本的终端中。相反，Cromwell将此输出保存在执行文件夹中名为stderr的日志文件中。</p>
+</div>
+<p>默认情况下，你可以在这个文件夹中找到所有生成的文件(输出和日志):</p>
+<img alt="../_images/execution2.png" src="../_images/execution2.png" />
 </div>
 <div class="section" id="id2">
-<h2>运行WDL工作流<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
-<p>这将是短暂而甜蜜的。我们将向您展示如何生成指定输入的JSON模板(剧透:这非常简单)并将其填满. 然后我们将介绍执行WDL脚本的主要选项，重点介绍我们在自己的工作中使用的执行引擎，即Cromwell。如果你在两年前问我们是否会有一个执行引擎，我们可以在开发和生产中使用，在本地和云端，我们会说当猪会飞…</p>
-<p>Specify Inputs    Execute!
-指定输入    执行引擎</p>
-</div>
-<div class="section" id="id3">
-<h2>你准备好了吗<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
-<p>一旦您理解了编写和运行WDL工作流所涉及的核心概念，下一步就是亲自动手!在教程部分，我们提供了一系列完整的“build-a-WDL”示例，在这些示例中，我们将指导您完成演示WDL所有关键特性的组装工作流的每个步骤。为了获得最好的效果，按照教程页面上建议的顺序学习教程。</p>
-<p>对于更广泛的用例，您还可以浏览实际的工作流，这些工作流是处理实际分析问题的脚本，我们在自己的工作中使用它们。这包括用于外显体和全基因组变异发现的广泛基因组生产管道。</p>
-<div class="section" id="id4">
-<h3>你需要什么<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
-<p>下面是运行用WDL编写的工作流(使用Cromwell执行引擎，因为我们使用它)所需的基本需求/事项列表，以及必要的安装说明。因为我们在本网站的大多数教程和示例WDL脚本中都使用了GATK，所以我们还提供了一个到GATK安装说明的链接，但是如果您不打算运行GATK WDLs，这是可选的。</p>
-<p>有一些额外的资源可以帮助您使用WDL;有关完整列表，请参见工具箱页面。</p>
-<p><a class="reference external" href="https://software.broadinstitute.org/wdl/documentation/quickstart#install6671">获取和如何安装</a></p>
-</div>
+<h2>在其他平台上运行<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>在集群或云平台上运行可能比这更复杂一些，所以我们在这个快速入门指南中不介绍它们。我们提供了一些指向将Cromwell封装在 <a class="reference external" href="https://software.broadinstitute.org/wdl/toolkit">工具包</a> 页面上的平台或集成的指针。</p>
+<p>这是它!现在您已经准备好自己编写一些脚本了，所以请直接进入教程部分。</p>
 </div>
 </div>
 
@@ -208,10 +216,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="structure.html" class="btn btn-neutral float-right" title="基础结构" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../tutorials/index.html" class="btn btn-neutral float-right" title="WDL 教程" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to WDL_document_zh’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="inputs.html" class="btn btn-neutral float-left" title="指定输入" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
