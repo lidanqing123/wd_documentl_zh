@@ -13,12 +13,12 @@ Welcome to WDL_document_zh's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Quick Start Guide:
+   :caption: WDL User Guide:
 
    quick/quickstart
    quick/structure
    quick/variables
-   
+   quick/plumbing   
 
 .. toctree::
    :maxdepth: 2
@@ -26,6 +26,21 @@ Welcome to WDL_document_zh's documentation!
 
    tutorials/index
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Supplement:
+
+   supplement/plumbing_options
+   supplement/components
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Real Workflows:
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: FAQ:
 
 
 Indices and tables

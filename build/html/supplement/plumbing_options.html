@@ -1,0 +1,880 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Plumbing Options &mdash; WDL_document_zh 0.1.1 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="prev" title="WDL 教程" href="../tutorials/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WDL_document_zh
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">WDL User Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick/quickstart.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/structure.html">基础结构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/variables.html">添加变量</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/plumbing.html">添加管道</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">WDL 教程</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Supplement:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Plumbing Options</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#if-else">条件控制(if/else)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">通用的示例脚本</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">具体的例子</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">具体的例子脚本</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">线性链接</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">通用的示例脚本</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">具体的例子</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">具体的例子脚本</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">多输入/多输出</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">通用的示例脚本</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">具体的例子</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">具体的例子脚本</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id12">散集的并行性</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id13">通用的示例脚本</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">具体的例子</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">具体的例子脚本</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id16">任务混叠</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id17">通用的示例脚本</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id18">具体的例子</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id19">具体的例子脚本</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WDL_document_zh</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Plumbing Options</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/supplement/plumbing_options.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="plumbing-options">
+<h1>Plumbing Options<a class="headerlink" href="#plumbing-options" title="永久链接至标题">¶</a></h1>
+<div class="section" id="if-else">
+<h2>条件控制(if/else)<a class="headerlink" href="#if-else" title="永久链接至标题">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">注解</p>
+<p class="last">条件语句已经在Cromwell version 24 中实现</p>
+</div>
+<p>有时，在管道操作时，有些步骤需要在某些时候运行，而不是在其他时候。这可能意味着在两条路径之间进行切换(例如，在modeA中运行一个工具vs.在modeB中运行一个工具)或完全跳过一个步骤(例如，运行一个工具vs.不运行一个工具)。在这种情况下，我们将使用条件语句。</p>
+<img alt="../_images/conditionals1.png" src="../_images/conditionals1.png" />
+<p>要在WDL中使用条件语句，需要编写一个标准的if语句</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="p">(</span><span class="n">shouldICallStepB</span><span class="p">){</span>
+  <span class="n">call</span> <span class="n">stepB</span> <span class="p">{</span><span class="nb">input</span><span class="p">:</span> <span class="ow">in</span><span class="o">=</span><span class="n">stepA</span><span class="o">.</span><span class="n">out</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>可以显式地控制if语句，正如我们在上面的示例中使用布尔变量所做的那样。它还可以通过测试其他一些变量的值来进行隐式控制，这些变量除了作为开关机制之外还有自己的用途。(i.e. if(myVar&gt;0) { call stepB }</p>
+<div class="admonition note">
+<p class="first admonition-title">注解</p>
+<p class="last">处理条件步骤的输出有点不同;有关stepC的详细信息，请参阅下面的通用示例脚本</p>
+</div>
+<p>WDL还没有一个else语句。现在为了解决这个问题，我们使用!修改器获取原始变量的相反值，如</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Boolean myBoolVar
+if(myBoolVar) { call taskA }
+if(!myBoolVar) { call taskB }
+</pre></div>
+</div>
+</div></blockquote>
+<div class="section" id="id1">
+<h3>通用的示例脚本<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h3>
+<p>在下面的上下文中查看这个管道方法。</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>workflow Conditional {
+File firstInput
+Boolean shouldICallStepB
+    call stepA { input: in=firstInput }
+    if(shouldICallStepB) {
+        call stepB
+    }
+    call stepC { input: in_maybe=stepB.out}
+}
+
+task stepA {
+    File in
+    command { programA I=${in} O=outputA.ext }
+    output { File out=&quot;outputA.ext&quot; }
+}
+task stepB {
+    File in
+    command { programB I=${in} O=outputB.ext }
+    output { File out=&quot;outputB.ext&quot; }
+}
+task stepC {
+    File? in_maybe
+    command { programB I=${in_maybe} O=outputB.ext }
+    output { File out=&quot;outputB.ext&quot; }
+}
+</pre></div>
+</div>
+</div></blockquote>
+<p>需要注意的是，stepC的输入必须声明为可选类型，使用?修饰符。在 if{…} 块之外，stepB的输出不能保证存在，因此stepC必须通过允许可选输入来处理它不运行的可能性。</p>
+</div>
+<div class="section" id="id2">
+<h3>具体的例子<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
+<p>这里我们声明GVCFmode，一个布尔类型的变量。如果这是真的，那么我们想要在GVCF模式下运行这个工具，否则我们想要在普通模式下运行它。基本上，这个工作流允许您选择希望运行哪个HaplotypeCaller方法。</p>
+<img alt="../_images/conditionals2.jpg" src="../_images/conditionals2.jpg" />
+<p>对于我们的用例，我们已经声明了三个任务，如下:</p>
+<ul class="simple">
+<li>HaplotypeCallerERC接收一个bamFile文件并生成一个GVCF文件。</li>
+<li>GenotypeGVCFs接收一个文件GVCF并生成一个文件rawVCF。</li>
+<li>HaplotypeCaller接收一个bamFile文件并生成一个rawVCF文件。</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h3>具体的例子脚本<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>workflow ConditionalExample {
+
+    Boolean GVCFmode
+    File inputBam
+
+    if (GVCFmode) {
+        call HaplotypeCallerERC { input: bamFile=inputBam }
+        call GenotypeGVCF { input: GVCF=HaplotypeCallerERC.GVCF }
+    }
+    if (!GVCFmode) {
+        call HaplotypeCaller { input: bamFile=inputBam }
+    }
+}
+
+task HaplotypeCaller {
+
+    File bamFile
+
+    command {
+        java -jar GenomeAnalysisTK.jar \
+            -T HaplotypeCaller \
+            -R reference.fasta \
+            -I ${bamFile} \
+            -o rawVariants.vcf
+    }
+    output {
+        File rawVCF=&quot;rawVariants.vcf&quot;
+    }
+}
+
+task HaplotypeCallerERC {
+
+    File bamFile
+
+    command{
+        java -jar GenomeAnalysisTK.jar \
+            -T HaplotypeCaller \
+            -ERC GVCF \
+            -R reference.fasta \
+            -I ${bamFile} \
+            -o rawLikelihoods.gvcf
+    }
+    output {
+        File GVCF=&quot;rawLikelihoods.gvcf&quot;
+    }
+}
+
+task GenotypeGVCF {
+
+    File GVCF
+
+    command {
+        java -jar GenomeAnalysisTK.jar \
+            -T GenotypeGVCFs \
+            -R reference.fasta \
+            -V ${GVCF} \
+            -o rawVariants.vcf
+    }
+    output {
+        File rawVCF=&quot;rawVariants.vcf&quot;
+    }
+}
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>线性链接<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
+<p>在工作流中，将任务链在一起的最简单方法是线性链，我们将一个任务的输出提供给下一个任务的输入，就像这样:</p>
+<img alt="../_images/linear1.jpg" src="../_images/linear1.jpg" />
+<p>这很容易做到，因为WDL允许我们使用task_name.output_variable语法，在另一个任务的call语句(实际上，在工作流块的任何地方)中引用任何任务的output(在任务的输出块中适当地声明)。这里，我们简单地在stepB调用中指定我们希望它使用stepA.out作为输入变量in的值，这与stepC的规则相同。</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">call</span> <span class="n">stepB</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="ow">in</span><span class="o">=</span><span class="n">stepA</span><span class="o">.</span><span class="n">out</span> <span class="p">}</span>
+<span class="n">call</span> <span class="n">stepC</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="ow">in</span><span class="o">=</span><span class="n">stepB</span><span class="o">.</span><span class="n">out</span> <span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>这依赖于一个称为层次命名的原则，它允许我们根据组件的父类来识别组件。</p>
+<div class="section" id="id5">
+<h3>通用的示例脚本<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h3>
+<p>把它放在上下文中，下面是上面所示的工作流的完整代码:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>workflow LinearChain {
+  File firstInput
+  call stepA { input: in=firstInput }
+  call stepB { input: in=stepA.out }
+  call stepC { input: in=stepB.out }
+}
+
+task stepA {
+  File in
+  command { programA I=${in} O=outputA.ext }
+  output { File out = &quot;outputA.ext&quot; }
+}
+
+task stepB {
+  File in
+  command { programB I=${in} O=outputB.ext }
+  output { File out = &quot;outputB.ext&quot; }
+}
+
+task stepC {
+  File in
+  command { programC I=${in} O=outputC.ext }
+  output { File out = &quot;outputC.ext&quot; }
+}
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="id6">
+<h3>具体的例子<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h3>
+<p>让我们来看一个具体的线性链例子，它位于一个工作流中，该工作流设计用于预处理一些DNA排序数据(markdupl)，对预处理数据执行分析(HaplotypeCaller)，然后对分析结果进行子集处理(selectvariant)。</p>
+<img alt="../_images/linear2.jpg" src="../_images/linear2.jpg" />
+<p>工作流程包括三个任务:</p>
+<ul class="simple">
+<li>MarkDuplicates 接受一个bamFile文件并生成一个文件metrics 和一个文件dedupBAM。</li>
+<li>HaplotypeCaller 接收一个bamFile文件并生成一个rawVCF文件。</li>
+<li>SelectVariants 接受文件VCF和字符串类型，以指定是选择INDELs还是SNPs。它生成一个文件subsetVCF，仅包含指定类型的变异。</li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h3>具体的例子脚本<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h3>
+<p>这就是上面所示的工作流程的代码:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>workflow LinearChainExample {
+  File originalBAM
+  call MarkDuplicates { input: bamFile=originalBAM }
+  call HaplotypeCaller { input: bamFile=MarkDuplicates.dedupBam }
+  call SelectVariants { input: VCF=HaplotypeCaller.rawVCF, type=&quot;INDEL&quot; }
+}
+
+task MarkDuplicates {
+  File bamFile
+  command {
+    java -jar picard.jar MarkDuplicates \
+    I=${bamFile} O=dedupped.bam M= dedupped.metrics
+  }
+  output {
+    File dedupBam = &quot;dedupped.bam&quot;
+    File metrics = &quot;dedupped.metrics&quot;
+  }
+}
+
+task HaplotypeCaller {
+  File bamFile
+  command {
+    java -jar GenomeAnalysisTK.jar \
+      -T HaplotypeCaller \
+      -R reference.fasta \
+      -I ${bamFile} \
+      -o rawVariants.vcf
+  }
+  output {
+    File rawVCF = &quot;rawVariants.vcf&quot;
+  }
+}
+
+task SelectVariants {
+  File VCF
+  String type
+  command {
+    java -jar GenomeAnalysisTK.jar \
+      -T SelectVariants \
+      -R reference.fasta \
+      -V ${VCF} \
+      --variantType ${type} \
+      -o rawIndels.vcf
+  }
+  output {
+    File subsetVCF = &quot;rawIndels.vcf&quot;
+  }
+}
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">注解</p>
+<p class="last">注意，为了简单起见，这里省略了索引文件的处理，这必须在WDL中显式地完成。有关如何实现此目的的示例，请参阅教程和实际工作流。</p>
+</div>
+</div>
+</div>
+<div class="section" id="id8">
+<h2>多输入/多输出<a class="headerlink" href="#id8" title="永久链接至标题">¶</a></h2>
+<p>将输出连接到线性链接中描述的输入(依赖于分层命名)的能力允许您将产生多个输出并接受多个输入的工具链接在一起，并精确地指定哪个输出输入到哪个输入。</p>
+<img alt="../_images/multiple1.jpg" src="../_images/multiple1.jpg" />
+<p>由于stepB的输出名称不同，我们可以指定下一步输入字段中的每个输出的确切位置。</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">call</span> <span class="n">stepC</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="n">in1</span><span class="o">=</span><span class="n">stepB</span><span class="o">.</span><span class="n">out1</span><span class="p">,</span> <span class="n">in2</span><span class="o">=</span><span class="n">stepB</span><span class="o">.</span><span class="n">out2</span> <span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="section" id="id9">
+<h3>通用的示例脚本<a class="headerlink" href="#id9" title="永久链接至标题">¶</a></h3>
+<p>在上下文中，这种管道看起来如下:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>workflow MultiOutMultiIn {
+
+  File firstInput
+
+  call stepA { input: in=firstInput }
+  call stepB { input: in=stepA.out }
+  call stepC { input: in1=stepB.out1, in2=stepB.out2 }
+}
+
+task stepA {
+
+  File in
+
+  command { programA I=${in} O=outputA.ext }
+  output { File out = &quot;outputA.ext&quot; }
+}
+
+task stepB {
+
+  File in
+
+  command { programB I=${in} O1=outputB1.ext O2=outputB2.ext }
+  output {
+    File out1 = &quot;outputB1.ext&quot;
+    File out2 = &quot;outputB2.ext&quot; }
+}
+
+task stepC {
+
+  File in1
+  File in2
+
+  command { programB I1=${in1} I2=${in2} O=outputC.ext }
+  output { File out = &quot;outputC.ext&quot; }
+}
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="id10">
+<h3>具体的例子<a class="headerlink" href="#id10" title="永久链接至标题">¶</a></h3>
+<p>该工作流使用Picard的splitVcfs工具将原始VCF分隔成两个VCF文件，一个文件只包含snp，另一个文件只包含indel。下一步是将这两个分离的VCFs重新合并为一个。</p>
+<img alt="../_images/multiple2.jpg" src="../_images/multiple2.jpg" />
+<p>对于这个玩具示例，我们定义了两个任务:</p>
+<ul class="simple">
+<li>splitVcfs 接收一个文件VCF并输出一个文件snpOut和一个文件indelOut。</li>
+<li>CombineVariants 接收文件VCF1和文件VCF2，生成文件VCF。</li>
+</ul>
+</div>
+<div class="section" id="id11">
+<h3>具体的例子脚本<a class="headerlink" href="#id11" title="永久链接至标题">¶</a></h3>
+<p>上面描述的工作流程，就其整体而言，应该是这样的:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>workflow MultiOutMultiInExample {
+
+  File inputVCF
+
+  call splitVcfs { input: VCF=inputVCF }
+  call CombineVariants { input: VCF1=splitVcfs.indelOut, VCF2=splitVcfs.snpOut }
+}
+
+task splitVcfs {
+
+  File VCF
+
+  command {
+    java -jar picard.jar SplitVcfs \
+        I=${VCF} \
+        SNP_OUTPUT=snp.vcf \
+        INDEL_OUTPUT=indel.vcf
+  }
+  output {
+    File snpOut = &quot;snp.vcf&quot;
+    File indelOut = &quot;indel.vcf&quot;
+  }
+}
+
+task CombineVariants {
+
+  File VCF1
+  File VCF2
+
+  command {
+    java -jar GenomeAnalysisTK.jar \
+        -T CombineVariants
+        -R reference.fasta \
+        -V ${VCF1} \
+        -V ${VCF2} \
+        --genotypemergeoption UNSORTED \
+        -o combined.vcf
+  }
+  output {
+    File VCF = &quot;combined.vcf&quot;
+  }
+}
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">注解</p>
+<p class="last">注意，为了简单起见，这里省略了索引文件的处理，这必须在WDL中显式地完成。有关如何实现此目的的示例，请参阅教程和实际工作流。</p>
+</div>
+</div>
+</div>
+<div class="section" id="id12">
+<h2>散集的并行性<a class="headerlink" href="#id12" title="永久链接至标题">¶</a></h2>
+<p>并行性是一种通过并行执行几个操作而不是顺序执行(即在开始下一个操作之前等待每个操作完成)来使程序更快完成的方法。有关并行性的更详细介绍，可以在这里深入阅读。</p>
+<img alt="../_images/scatter1.jpg" src="../_images/scatter1.jpg" />
+<p>为此，我们使用WDL标准库中的scatter函数，该函数将在数组中的每个输入上生成运行相同任务的可并行作业，并将结果作为数组输出。</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Array</span><span class="p">[</span><span class="n">File</span><span class="p">]</span> <span class="n">inputFiles</span>
+
+  <span class="n">scatter</span> <span class="p">(</span><span class="n">oneFile</span> <span class="ow">in</span> <span class="n">inputFiles</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">call</span> <span class="n">stepA</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="ow">in</span><span class="o">=</span><span class="n">oneFile</span> <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">call</span> <span class="n">stepB</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="n">files</span><span class="o">=</span><span class="n">stepA</span><span class="o">.</span><span class="n">out</span> <span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>这里的神奇之处在于，输出的数组被生成并传递给下一个任务，而无需您明确声明它是一个数组。即使根据它的声明，stepA的输出看起来像一个单独的文件，但它只引用了stepA.out。在任何其他call语句中，WDL都足以知道您指的是对所有并行stepA作业的输出进行分组的数组。</p>
+<p>换句话说，流程的分散部分是显式的，而聚集部分是隐式的。</p>
+<div class="section" id="id13">
+<h3>通用的示例脚本<a class="headerlink" href="#id13" title="永久链接至标题">¶</a></h3>
+<p>把它放在上下文中，下面是上面所示的工作流的完整代码:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>workflow ScatterGather {
+
+  Array[File] inputFiles
+
+  scatter (oneFile in inputFiles) {
+    call stepA { input: in=oneFile }
+  }
+  call stepB { input: files=stepA.out }
+}
+
+task stepA {
+
+  File in
+
+  command { programA I=${in} O=outputA.ext }
+  output { File out = &quot;outputA.ext&quot; }
+}
+
+task stepB {
+
+  Array[File] files
+
+  command { programB I=${files} O=outputB.ext }
+  output { File out = &quot;outputB.ext&quot; }
+}
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="id14">
+<h3>具体的例子<a class="headerlink" href="#id14" title="永久链接至标题">¶</a></h3>
+<p>让我们看一个具体的分散-收集并行性的例子，在一个工作流中设计为每个样本单独调用变量(HaplotypeCaller)，然后一起对所有每个样本的GVCFs执行联合基因分型(GenotypeGVCFs)。</p>
+<img alt="../_images/scatter2.jpg" src="../_images/scatter2.jpg" />
+<p>工作流程包括两项工作:</p>
+<ul class="simple">
+<li>HaplotypeCallerERC 接收一个bamFile文件并生成一个GVCF文件。</li>
+<li>GenotypeGVCFs 接收一个数组[文件]GVCF并生成一个文件rawVCF。</li>
+</ul>
+</div>
+<div class="section" id="id15">
+<h3>具体的例子脚本<a class="headerlink" href="#id15" title="永久链接至标题">¶</a></h3>
+<p>这就是上面所示的工作流程的代码:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>workflow ScatterGatherExample {
+
+  Array[File] sampleBAMs
+
+  scatter (sample in sampleBAMs) {
+    call HaplotypeCallerERC { input: bamFile=sample }
+  }
+  call GenotypeGVCF { input: GVCFs=HaplotypeCallerERC.GVCF }
+}
+
+task HaplotypeCallerERC {
+
+  File bamFile
+
+  command {
+    java -jar GenomeAnalysisTK.jar \
+        -T HaplotypeCaller \
+        -ERC GVCF \
+        -R reference.fasta \
+        -I ${bamFile} \
+        -o rawLikelihoods.gvcf
+  }
+  output {
+    File GVCF = &quot;rawLikelihoods.gvcf&quot;
+  }
+}
+
+task GenotypeGVCF {
+
+  Array[File] GVCFs
+
+  command {
+    java -jar GenomeAnalysisTK.jar \
+        -T GenotypeGVCFs \
+        -R reference.fasta \
+        -V ${GVCFs} \
+        -o rawVariants.vcf
+  }
+  output {
+    File rawVCF = &quot;rawVariants.vcf&quot;
+  }
+}
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">注解</p>
+<p>注意，为了简单起见，这里省略了索引文件的处理，这必须在WDL中显式地完成。有关如何实现此目的的示例，请参阅教程和实际工作流。</p>
+<p class="last">另外，请注意，在本例中我们没有明确处理数组数据类型的分隔符。要明确了解如何指定${GVCFs}输入，请参阅教程。</p>
+</div>
+</div>
+</div>
+<div class="section" id="id16">
+<h2>任务混叠<a class="headerlink" href="#id16" title="永久链接至标题">¶</a></h2>
+<p>当您需要在工作流中多次调用任务时，可以使用任务别名。每次您需要在工作流中再次使用任务的定义并更改名称时，复制粘贴任务的定义并更改名称都是非常繁琐的。这种方法称为复制和粘贴编程，在开始时非常简单，但从长远来看很难维护。假设您在某个任务中发现了一个输入错误—您需要修复每个粘贴的任务中的输入错误!但是，使用WDL内置的任务别名功能，您可以调用相同的任务代码并为其分配别名。然后，根据分层命名的原则，为了访问别名任务的输出，我们使用别名而不是原始任务名称。</p>
+<img alt="../_images/alias1.png" src="../_images/alias1.png" />
+<p>要使用别名，我们使用语法调用taskName作为别名。</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">call</span> <span class="n">stepA</span> <span class="k">as</span> <span class="n">firstSample</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="ow">in</span><span class="o">=</span><span class="n">firstInput</span> <span class="p">}</span>
+<span class="n">call</span> <span class="n">stepA</span> <span class="k">as</span> <span class="n">secondSample</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="ow">in</span><span class="o">=</span><span class="n">secondInput</span> <span class="p">}</span>
+<span class="n">call</span> <span class="n">stepB</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="ow">in</span><span class="o">=</span><span class="n">firstSample</span><span class="o">.</span><span class="n">out</span> <span class="p">}</span>
+<span class="n">call</span> <span class="n">stepC</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="ow">in</span><span class="o">=</span><span class="n">secondSample</span><span class="o">.</span><span class="n">out</span> <span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="section" id="id17">
+<h3>通用的示例脚本<a class="headerlink" href="#id17" title="永久链接至标题">¶</a></h3>
+<p>工作流程及其任务大致如下:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>workflow taskAlias {
+
+  File firstInput
+  File secondInput
+
+  call stepA as firstSample { input: in=firstInput }
+  call stepA as secondSample { input: in=secondInput }
+  call stepB { input: in=firstSample.out }
+  call stepC { input: in=secondSample.out }
+}
+
+task stepA {
+
+  File in
+
+  command { programA I=${in} O=outputA.ext }
+  output { File out = &quot;outputA.ext&quot; }
+}
+
+task stepB {
+
+  File in
+
+  command { programB I=${in} O=outputB.ext }
+  output { File out = &quot;outputB.ext&quot; }
+}
+
+task stepC {
+
+  File in
+
+  command { programC I=${in} O=outputC.ext }
+  output { File out = &quot;outputC.ext&quot; }
+}
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="id18">
+<h3>具体的例子<a class="headerlink" href="#id18" title="永久链接至标题">¶</a></h3>
+<p>让我们看看这个任务混叠的概念在一个真实的例子;使用GATK，该工作流使用相同的任务select(但有两个不同的别名调用，即selectSNPs和selectIndels)将snp和indel分离到不同的vcf文件中。然后，这些调用的不同输出由专门为它们设计的单独任务进行硬筛选，分别为hardFilterSNP和hardFilterIndel。</p>
+<img alt="../_images/alias2.png" src="../_images/alias2.png" />
+<p>对于这个玩具示例，我们定义了三个任务:</p>
+<ul class="simple">
+<li>select接受一个字符串类型(指定“SNP”或“Indel”)和一个文件rawVCF，输出一个文件raw子集，其中只包含指定类型的变体。</li>
+<li>hardFilterSNP接收文件rawsnp并输出文件filteredsnp。</li>
+<li>hardFilterIndels接收文件rawIndels并输出文件filteredIndels。</li>
+</ul>
+</div>
+<div class="section" id="id19">
+<h3>具体的例子脚本<a class="headerlink" href="#id19" title="永久链接至标题">¶</a></h3>
+<p>上面的工作流程描述是这样的:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>workflow taskAliasExample {
+
+  File rawVCFSample
+
+  call select as selectSNPs { input: type=&quot;SNP&quot;, rawVCF=&quot;rawVCFSample&quot; }
+  call select as selectIndels { input: type=&quot;INDEL&quot;, rawVCF=&quot;rawVCFSample&quot; }
+  call hardFilterSNP { input: rawSNPs=selectSNPs.rawSubset }
+  call hardFilterIndel { input: rawIndels=selectIndels.rawSubset }
+}
+
+task select {
+
+  String type
+  File rawVCF
+
+  command {
+    java -jar GenomeAnalysisTK.jar \
+      -T SelectVariants \
+      -R reference.fasta \
+      -V ${rawVCF} \
+      -selectType ${type} \
+      -o raw.${type}.vcf
+  }
+  output {
+    File rawSubset = &quot;raw.${type}.vcf&quot;
+  }
+}
+
+task hardFilterSNP {
+
+  File rawSNPs
+
+  command {
+    java -jar GenomeAnalysisTK.jar \
+        -T VariantFiltration \
+        -R reference.fasta \
+        -V ${rawSNPs} \
+        --filterExpression &quot;FS &gt; 60.0&quot; \
+        --filterName &quot;snp_filter&quot; \
+        -o .filtered.snps.vcf
+  }
+  output {
+    File filteredSNPs = &quot;.filtered.snps.vcf&quot;
+  }
+}
+
+task hardFilterIndel {
+
+  File rawIndels
+
+  command {
+    java -jar GenomeAnalysisTK.jar \
+        -T VariantFiltration \
+        -R reference.fasta \
+        -V ${rawIndels} \
+        --filterExpression &quot;FS &gt; 200.0&quot; \
+        --filterName &quot;indel_filter&quot; \
+        -o filtered.indels.vcf
+  }
+  output {
+    File filteredIndels = &quot;filtered.indels.vcf&quot;
+  }
+}
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">注解</p>
+<p class="last">注意，为了简单起见，这里省略了索引文件的处理，这必须在WDL中显式地完成。有关如何实现此目的的示例，请参阅教程和实际工作流。</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../tutorials/index.html" class="btn btn-neutral float-left" title="WDL 教程" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, lidanqing
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

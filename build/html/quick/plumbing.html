@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>添加管道 &mdash; WDL_document_zh 0.1.1 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="WDL 教程" href="../tutorials/index.html" />
+    <link rel="prev" title="添加变量" href="variables.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WDL_document_zh
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">WDL User Guide:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">基础结构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variables.html">添加变量</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">添加管道</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">概述</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">简单的连接</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">切换和迭代逻辑</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">通过代码重用提高效率</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#if-else">条件(if/else)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">线性链接</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">多输入/多输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">散集的并行性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id9">任务混叠</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">WDL 教程</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Supplement:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../supplement/plumbing_options.html">Plumbing Options</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WDL_document_zh</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>添加管道</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/quick/plumbing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>添加管道<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>通过管道，我们意味着将任务链接在一起，形成复杂的管道。如何在WDL中实现呢?</p>
+<p>毫不费力的优雅，就是这样。</p>
+<div class="section" id="id2">
+<h2>概述<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<div class="section" id="id3">
+<h3>简单的连接<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
+<p>至此，您已经知道如何在您的工作流脚本中包含多个任务。如果你在关注变量的部分，你甚至知道如何将一个任务的输出连接到下一个任务的输入。这使您能够构建任意长度的线性或简单的分支和合并工作流，在任务之间连接单个或多个输入和输出——除了我们已经介绍的之外，没有任何其他类型的代码。</p>
+</div>
+<div class="section" id="id4">
+<h3>切换和迭代逻辑<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
+<p>除了这些基本的连接功能之外，有时还需要能够在不同的路径之间进行切换，并对数据集进行迭代，可以是串联的，也可以是并行的。为此，我们需要更多的代码，但是不要担心……你不需要写任何东西!我们将利用WDL语法的各个方面和一些方便的内置特性，这些特性使添加这个逻辑变得非常容易。这是我们最喜欢的功能.在WDL中是分散收集并行性(scatter-gather parallelism)，当您需要将相同的命令应用于可以视为独立单元的数据子集时，这是加快执行速度的好方法。下面是在WDL中定义的两个附加特性(循环和条件)，它们还没有得到Cromwell执行引擎的完全支持，但是这个功能正在积极开发中。</p>
+</div>
+<div class="section" id="id5">
+<h3>通过代码重用提高效率<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h3>
+<p>最后，您会发现您经常需要在不同的上下文中做类似的事情。与其将相关代码复制到多个地方(这样会生成更多的代码来维护和更新)，还不如偷懒，巧妙地重用代码，如果有问题，可以通过任务别名来解决.  e.g. 以不同的方式运行相同的工具，或者,通过大量导入工作流(抱歉，后者还没有完全实现，但是它在开发路线图上。)</p>
+</div>
+</div>
+<div class="section" id="if-else">
+<h2>条件(if/else)<a class="headerlink" href="#if-else" title="永久链接至标题">¶</a></h2>
+</div>
+<div class="section" id="id6">
+<h2>线性链接<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h2>
+</div>
+<div class="section" id="id7">
+<h2>多输入/多输出<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h2>
+</div>
+<div class="section" id="id8">
+<h2>散集的并行性<a class="headerlink" href="#id8" title="永久链接至标题">¶</a></h2>
+</div>
+<div class="section" id="id9">
+<h2>任务混叠<a class="headerlink" href="#id9" title="永久链接至标题">¶</a></h2>
+<p>使用所有这些将对任务的调用组装到工作流中的选项，我们可以构建一些相当复杂的数据处理和分析管道。诚然，刚开始这似乎有点难以承受，但不要担心——我们是来帮忙的!一旦你完成了WDL的基础知识，我们将向你展示一系列的教程，展示如何将每个选项应用到我们在基因组学中遇到的一些经典用例中。但首先，我们将向您展示如何检查工作流的语法是否有效。虽然没有判断的健全的工作流程设计!</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../tutorials/index.html" class="btn btn-neutral float-right" title="WDL 教程" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="variables.html" class="btn btn-neutral float-left" title="添加变量" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, lidanqing
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
