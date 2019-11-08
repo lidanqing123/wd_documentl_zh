@@ -1,6 +1,6 @@
 
-Components
-===========
+Script Components
+===================
 
 basename()
 ----------
