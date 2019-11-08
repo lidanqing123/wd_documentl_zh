@@ -1,0 +1,235 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>添加变量 &mdash; WDL_document_zh 0.1.1 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="WDL 教程" href="../tutorials/index.html" />
+    <link rel="prev" title="基础结构" href="structure.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WDL_document_zh
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Quick Start Guide:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">基础结构</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">添加变量</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">添加任务级别的变量</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">添加工作流级别变量</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">WDL 教程</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WDL_document_zh</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>添加变量</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/quick/variables.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>添加变量<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>在这个上下文中，变量是我们写入脚本中的占位符，而不是实际的文件名和参数值。然后，我们可以指定在runtime(即运行脚本时)要使用的文件名和值，而无需修改脚本，这非常方便。请注意，我们不必在所有情况下都使用变量——对于某些参数，如果它们在每次运行时都不会改变，那么硬编码这些值是有意义的。</p>
+<p>因此，让我们看看如何在WDL脚本中包含变量(稍后我们将讨论如何在运行时指定变量值)。我们可能希望在两个不同的级别中包含变量:在单个任务中，或者在整个工作流中，这样变量就可以用于它调用的任何任务。我们将从任务级变量开始，因为它是最简单的情况，然后在此基础上处理工作流级变量，它有一些(非常合理且完全不难)复杂性。在这个解释的过程中，我们将接触到变量值如何从一个任务继承到下一个任务，这是下一个主题的一种预览，关于将任务连接在一起。</p>
+<div class="section" id="id2">
+<h2>添加任务级别的变量<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<img alt="../_images/WDL-task-variables.png" src="../_images/WDL-task-variables.png" />
+<p>回到前面的示例中的task_A，让我们看看它的命令和输出组件块中实际包含的内容。我们虚构了一个名为do_stuff的程序，它可能会做一些比打印“Hello World”更有趣的事情。这个程序需要分别使用参数R=和I=提供两个文件，并生成一个必须使用参数O=命名的输出文件。如果我们要硬编码这些值，我们可以只编写命令行，就像我们在终端中运行它一样,e.g. do_stuff R=reference.fa I=input.bam O=variants.vcf.</p>
+<p>为了用变量替换这些硬编码的值，我们首先必须声明变量，这是一种奇特的方式，表示我们在任务块的顶部写它们的名称和它们代表的值的类型，例如File: ref。然后，我们可以在命令中适当的位置，在花括号中插入变量名，并以美元符号作为前缀，如: R=${ref}.</p>
+<p>在这里，对于O=的值，我们使用变量来指定一个基名。该脚本将自动地将这个基名称与我们硬编码的.ext文件扩展名连接起来，从${id}.ext生成完整的输出文件名。</p>
+<p>最后，我们标识希望作为程序输出跟踪的命令的任何参数(在本例中是O=参数)，并通过将其分配的内容复制到输出块来声明它们，如示例所示。注意，这里我们也显式地指定了变量类型。</p>
+</div>
+<div class="section" id="id3">
+<h2>添加工作流级别变量<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<img alt="../_images/WDL-workflow-variables.png" src="../_images/WDL-workflow-variables.png" />
+<p>移出一层，到工作流的主体，您会看到我们现在已经在顶部声明了一组变量。这些声明基本上遵循与任务内部声明相同的规则。我们现在需要做的就是连接这两个级别，这样传递给工作流的参数就可以用作任务的输入。</p>
+<p>为此，我们只需向call函数添加一个代码块。此块仅包含一个 input: 行，它枚举哪些工作流级变量连接到哪些任务级变量。</p>
+<p>我们对这个工作流中调用的第二个任务task_B执行非常类似的操作，但有一个关键区别。首先，公共部分:task_B也接受引用文件作为输入，因此我们可以简单地提供相同的工作流级变量my_ref。到task_B中相应的变量. 但是，对于它的其他输入，我们需要给task_B task_A的输出。我们可以简单地使用task_name.output_variable语法引用它，这很方便. ——在这里是task_a.out。</p>
+<p>最后，我们仍然需要知道如何将值传递给工作流来填充所有这些变量，不是吗?是的。是的,我们做的。</p>
+<p>当然，您可以在声明变量时硬编码这些值，对于某些您知道总是相同的参数，这样做是有意义的。但是肯定有一些变量你需要保留，嗯，变量，所以你不必编辑你的脚本从运行到运行。</p>
+<p>如何在实践中实现这一点主要取决于执行引擎，而不是WDL。流水线系统通常使用两种主要策略中的一种来满足这一需求:要么作为启动工作流执行的命令行的一部分提供值，要么提供一种列出所有所需值的配置文件。在Cromwell执行引擎中，我们更喜欢使用输入定义文件，这将在后面的小节中详细介绍。</p>
+<p>这还不算太糟。在下一节中，我们将讨论如何通过任务的输入和输出，以及一些额外的函数来连接任务，从而在不增加不必要的代码复杂性的情况下生成功能完整的任务。</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../tutorials/index.html" class="btn btn-neutral float-right" title="WDL 教程" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="structure.html" class="btn btn-neutral float-left" title="基础结构" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, lidanqing
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

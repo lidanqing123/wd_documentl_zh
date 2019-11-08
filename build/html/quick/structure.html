@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>基础结构 &mdash; WDL_document_zh 0.1.1 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="添加变量" href="variables.html" />
+    <link rel="prev" title="快速开始" href="quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WDL_document_zh
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Quick Start Guide:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">快速开始</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">基础结构</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#workflow-task-and-call">顶级组件:workflow, task and call</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#call">call</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task">task</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#workflow">workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#command-and-output">核心任务级组件:command and output</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#command">command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#output">output</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="variables.html">添加变量</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">WDL 教程</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WDL_document_zh</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>基础结构</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/quick/structure.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>基础结构<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>有5个基本组件组成了WDL脚本的核心结构:workflow、task、call、command和output。没有明确命名的“input”定义组件; input变量(用于指定参数以及输入和输出文件名)将被单独定义，我们将在下面进一步看到。您还可以使用一些可选组件来指定runtime参数(如环境条件，如Docker图像)、meta information(如任务作者和电子邮件)和parameter_meta参数描述输入和输出——但我们现在不打算考虑它们。</p>
+<p>让我们来看看核心组件是如何在一个最小的WDL脚本中构造的，该脚本描述了一个名为myWorkflowName的工作流和两个任务task_A和task_B(名称可以是任何您想要的名称，不必包含单词“task”或“workflow”)。为了让事情变得简单，我们假设所有的参数、输入和输出文件名都是硬编码的(意味着实际的文件名和参数值是在脚本本身中编写的)，并且没有变量。我们将在下一个步骤中看到如何向这个基本结构添加变量。</p>
+<div class="section" id="workflow-task-and-call">
+<h2>顶级组件:workflow, task and call<a class="headerlink" href="#workflow-task-and-call" title="永久链接至标题">¶</a></h2>
+<p>在顶层，我们定义一个工作流，在这个工作流中我们调用一组任务。请注意，任务是在工作流块外部定义的，而调用语句是在工作流块内部定义的。</p>
+<p>工作流块和任务定义在脚本中的排列顺序并不重要。调用语句的顺序也不重要，我们将在后面看到。</p>
+<img alt="../_images/WDL-workflow.png" src="../_images/WDL-workflow.png" />
+<div class="section" id="call">
+<h3>call<a class="headerlink" href="#call" title="永久链接至标题">¶</a></h3>
+</div>
+<div class="section" id="task">
+<h3>task<a class="headerlink" href="#task" title="永久链接至标题">¶</a></h3>
+</div>
+<div class="section" id="workflow">
+<h3>workflow<a class="headerlink" href="#workflow" title="永久链接至标题">¶</a></h3>
+</div>
+</div>
+<div class="section" id="command-and-output">
+<h2>核心任务级组件:command and output<a class="headerlink" href="#command-and-output" title="永久链接至标题">¶</a></h2>
+<p>如果我们查看任务定义的内部，我们会发现它的核心组件:将要运行的命令，它可以是在终端shell中运行的任何命令行，以及一个输出定义，它显式地标识命令的哪一部分构成了它的输出。</p>
+<img alt="../_images/WDL-task.png" src="../_images/WDL-task.png" />
+<div class="section" id="command">
+<h3>command<a class="headerlink" href="#command" title="永久链接至标题">¶</a></h3>
+</div>
+<div class="section" id="output">
+<h3>output<a class="headerlink" href="#output" title="永久链接至标题">¶</a></h3>
+<p>可以看到，WDL脚本的基本结构相当简单。在下一节中，我们将通过添加变量而不是假设输入和输出名称以及所有参数都是硬编码的方式使其更加实际。</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="variables.html" class="btn btn-neutral float-right" title="添加变量" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="快速开始" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, lidanqing
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
