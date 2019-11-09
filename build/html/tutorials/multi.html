@@ -231,10 +231,9 @@
 <p>这类似于为您的输入声明一个变量名—您只是给了该任务调用一个您可以引用它的变量名。当我们想对输出做一些事情时，我们将调用selectSNPsrawSubset，而不是selectrawSubset——但这是另一个教程的主题。</p>
 <p>接下来让我们尝试添加输入。任务haplotypeCaller是我们工作流程的起点，它需要一个输入bam。此文件将直接传递到任务，因此不需要在这里的工作流中指定它。对于剩下的任务，我们必须指定将从工作流中的前面步骤生成的输入。要指定输入，请遵循下面的格式</p>
 <blockquote>
-<div><dl class="docutils">
-<dt>::</dt>
-<dd>input: inputname=taskname.outputname</dd>
-</dl>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">input</span><span class="p">:</span> <span class="n">inputname</span><span class="o">=</span><span class="n">taskname</span><span class="o">.</span><span class="n">outputname</span>
+</pre></div>
+</div>
 </div></blockquote>
 <p>因此，为了告诉我们的select步骤从haplotypeCaller获取rawVCF输出，我们写入input: rawVCF=haplotypeCaller.rawVCF。只需遍历每个任务调用，并按照流程图正确分配输入。</p>
 <blockquote>

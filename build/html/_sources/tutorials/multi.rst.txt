@@ -51,6 +51,7 @@ Workflow
 接下来让我们尝试添加输入。任务haplotypeCaller是我们工作流程的起点，它需要一个输入bam。此文件将直接传递到任务，因此不需要在这里的工作流中指定它。对于剩下的任务，我们必须指定将从工作流中的前面步骤生成的输入。要指定输入，请遵循下面的格式
 
   :: 
+
     input: inputname=taskname.outputname
 
 因此，为了告诉我们的select步骤从haplotypeCaller获取rawVCF输出，我们写入input: rawVCF=haplotypeCaller.rawVCF。只需遍历每个任务调用，并按照流程图正确分配输入。

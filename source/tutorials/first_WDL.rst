@@ -145,6 +145,7 @@ Task
 下一步是生成一个输入文件。我们使用以下命令:
 
   :: 
+
     java -jar wdltool.jar inputs helloHaplotypeCaller.wdl > helloHaplotypeCaller_inputs.json
 
 现在您应该在文本编辑器中打开helloHaplotypeCaller_inputs.json文件。此文本编辑器可能不是默认选项，或在快速菜单中显示为选项。对于大多数操作系统，您可以右击并打开，或者打开以导航到您选择的文本编辑器程序。文件扩展名、wdl和json并不总是可识别的，但它们将使用文本编辑器打开。
