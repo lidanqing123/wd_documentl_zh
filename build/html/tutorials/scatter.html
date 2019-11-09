@@ -1,0 +1,273 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>[4] (howto)使用分散-聚集联合调用基因型 &mdash; WDL_document_zh 0.1.1 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="Plumbing Options" href="../supplement/plumbing_options.html" />
+    <link rel="prev" title="[3] (howto)运行一个样本变量发现迷你管道" href="variant.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WDL_document_zh
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">WDL User Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick/quickstart.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/structure.html">基础结构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/variables.html">添加变量</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/plumbing.html">添加管道</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/validation.html">验证语法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/inputs.html">指定输入</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/execution.html">执行!</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="generate_json.html">(howto)生成一个描述输入的JSON文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">(howto) 安装WDL车间的软件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validate.html">(howto)在执行之前验证您的WDL脚本语法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_WDL.html">[1] (howto) 编写运行GATK HaplotypeCaller的第一个WDL脚本</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi.html">[2] (howto)编写一个简单的多步骤工作流</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variant.html">[3] (howto)运行一个样本变量发现迷你管道</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">[4] (howto)使用分散-聚集联合调用基因型</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">介绍</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">写你自己的脚本</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#workflow">Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tasks">Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">运行管道</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">检查你的结果</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Supplement:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../supplement/plumbing_options.html">Plumbing Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplement/components.html">Script Components</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Real Workflows:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../real_workflows/scatter_operation.html">Scatter operation example: jointCallingGenotypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../real_workflows/branched_workflow.html">Simple branched workflow example: SimpleVariantSelection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../real_workflows/variant_discovery.html">Simple variant discovery with HaplotypeCaller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../real_workflows/single_task.html">Single-task workflow example: helloHaplotypeCaller</a></li>
+</ul>
+<p class="caption"><span class="caption-text">FAQ:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/runtime_parameter.html">runtime参数值可以动态生成吗?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/java_versions.html">如何在同一台计算机上运行不同版本的Java ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/set_up.html">我需要设置什么来编写和执行WDL工作流?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/execution_engines.html">哪些工作流执行引擎支持WDL?Cromwell是什么?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WDL_document_zh</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>[4] (howto)使用分散-聚集联合调用基因型</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorials/scatter.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="howto">
+<h1>[4] (howto)使用分散-聚集联合调用基因型<a class="headerlink" href="#howto" title="永久链接至标题">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="永久链接至标题">¶</a></h2>
+<div class="section" id="id1">
+<h3>介绍<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h3>
+</div>
+<div class="section" id="id2">
+<h3>写你自己的脚本<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
+</div>
+</div>
+<div class="section" id="workflow">
+<h2>Workflow<a class="headerlink" href="#workflow" title="永久链接至标题">¶</a></h2>
+</div>
+<div class="section" id="tasks">
+<h2>Tasks<a class="headerlink" href="#tasks" title="永久链接至标题">¶</a></h2>
+</div>
+<div class="section" id="id3">
+<h2>运行管道<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<div class="section" id="id4">
+<h3>检查你的结果<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../supplement/plumbing_options.html" class="btn btn-neutral float-right" title="Plumbing Options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="variant.html" class="btn btn-neutral float-left" title="[3] (howto)运行一个样本变量发现迷你管道" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, lidanqing
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

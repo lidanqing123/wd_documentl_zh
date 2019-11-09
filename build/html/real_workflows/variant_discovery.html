@@ -1,0 +1,432 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Simple variant discovery with HaplotypeCaller &mdash; WDL_document_zh 0.1.1 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="Single-task workflow example: helloHaplotypeCaller" href="single_task.html" />
+    <link rel="prev" title="Simple branched workflow example: SimpleVariantSelection" href="branched_workflow.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WDL_document_zh
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">WDL User Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick/quickstart.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/structure.html">基础结构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/variables.html">添加变量</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/plumbing.html">添加管道</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/validation.html">验证语法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/inputs.html">指定输入</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/execution.html">执行!</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/generate_json.html">(howto)生成一个描述输入的JSON文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/install.html">(howto) 安装WDL车间的软件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/validate.html">(howto)在执行之前验证您的WDL脚本语法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/first_WDL.html">[1] (howto) 编写运行GATK HaplotypeCaller的第一个WDL脚本</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/multi.html">[2] (howto)编写一个简单的多步骤工作流</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/variant.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/variant.html#workflow">Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/variant.html#tasks">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/variant.html#id3">运行管道</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/scatter.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/scatter.html#workflow">Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/scatter.html#tasks">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/scatter.html#id3">运行管道</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Supplement:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../supplement/plumbing_options.html">Plumbing Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplement/components.html">Script Components</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Real Workflows:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="scatter_operation.html">Scatter operation example: jointCallingGenotypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="branched_workflow.html">Simple branched workflow example: SimpleVariantSelection</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Simple variant discovery with HaplotypeCaller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single_task.html">Single-task workflow example: helloHaplotypeCaller</a></li>
+</ul>
+<p class="caption"><span class="caption-text">FAQ:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/runtime_parameter.html">runtime参数值可以动态生成吗?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/java_versions.html">如何在同一台计算机上运行不同版本的Java ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/set_up.html">我需要设置什么来编写和执行WDL工作流?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/execution_engines.html">哪些工作流执行引擎支持WDL?Cromwell是什么?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WDL_document_zh</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Simple variant discovery with HaplotypeCaller</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/real_workflows/variant_discovery.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="simple-variant-discovery-with-haplotypecaller">
+<h1>Simple variant discovery with HaplotypeCaller<a class="headerlink" href="#simple-variant-discovery-with-haplotypecaller" title="永久链接至标题">¶</a></h1>
+<p>有关此脚本的更多信息，请阅读其 <a class="reference external" href="https://software.broadinstitute.org/wdl/userguide/article?id=7614">演练指南</a> 。</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>workflow SimpleVariantDiscovery {
+  File gatk
+  File refFasta
+  File refIndex
+  File refDict
+  String name
+  call haplotypeCaller {
+    input:
+      sampleName=name,
+      RefFasta=refFasta,
+      GATK=gatk,
+      RefIndex=refIndex,
+      RefDict=refDict
+  }
+  call select as selectSNPs {
+    input:
+      sampleName=name,
+      RefFasta=refFasta,
+      GATK=gatk,
+      RefIndex=refIndex,
+      RefDict=refDict,
+      type=&quot;SNP&quot;,
+      rawVCF=haplotypeCaller.rawVCF
+  }
+  call hardFilterSNP {
+    input:
+      sampleName=name,
+      RefFasta=refFasta,
+      GATK=gatk,
+      RefIndex=refIndex,
+      RefDict=refDict,
+      rawSNPs=selectSNPs.rawSubset
+  }
+  call select as selectIndels {
+    input:
+      sampleName=name,
+      RefFasta=refFasta,
+      GATK=gatk,
+      RefIndex=refIndex,
+      RefDict=refDict,
+      type=&quot;INDEL&quot;,
+      rawVCF=haplotypeCaller.rawVCF
+  }
+  call hardFilterIndel {
+    input:
+      sampleName=name,
+      RefFasta=refFasta,
+      GATK=gatk,
+      RefIndex=refIndex,
+      RefDict=refDict,
+      rawIndels=selectIndels.rawSubset
+  }
+  call combine {
+    input:
+      sampleName=name,
+      RefFasta=refFasta,
+      GATK=gatk,
+      RefIndex=refIndex,
+      RefDict=refDict,
+      filteredSNPs=hardFilterSNP.filteredSNPs,
+      filteredIndels=hardFilterIndel.filteredIndels
+  }
+}
+
+#This task calls GATK&#39;s tool, HaplotypeCaller in normal mode. This tool takes a pre-processed
+#bam file and discovers variant sites. These raw variant calls are then written to a vcf file.
+task haplotypeCaller {
+  File GATK
+  File RefFasta
+  File RefIndex
+  File RefDict
+  String sampleName
+  File inputBAM
+  File bamIndex
+  command {
+    java -jar ${GATK} \
+      -T HaplotypeCaller \
+      -R ${RefFasta} \
+      -I ${inputBAM} \
+      -o ${sampleName}.raw.indels.snps.vcf
+  }
+  output {
+    File rawVCF = &quot;${sampleName}.raw.indels.snps.vcf&quot;
+  }
+}
+
+#This task calls GATK&#39;s tool, SelectVariants, in order to separate indel calls from SNPs in
+#the raw variant vcf produced by HaplotypeCaller. The type can be set to &quot;INDEL&quot;
+#or &quot;SNP&quot;.
+task select {
+  File GATK
+  File RefFasta
+  File RefIndex
+  File RefDict
+  String sampleName
+  String type
+  File rawVCF
+  command {
+    java -jar ${GATK} \
+      -T SelectVariants \
+      -R ${RefFasta} \
+      -V ${rawVCF} \
+      -selectType ${type} \
+      -o ${sampleName}_raw.${type}.vcf
+  }
+  output {
+    File rawSubset = &quot;${sampleName}_raw.${type}.vcf&quot;
+  }
+}
+
+#This task calls GATK&#39;s tool, VariantFiltration. It applies certain recommended filtering
+#thresholds to the SNP-only vcf. VariantFiltration filters out any variant that is &quot;TRUE&quot;
+#for any part of the filterExpression (i.e. if a variant has a QD of 1.3, it would be
+#filtered out). The variant calls remain in the file, but they are tagged as not passing.
+#GATK tools downstream in the pipeline will ignore filtered calls by default
+task hardFilterSNP {
+  File GATK
+  File RefFasta
+  File RefIndex
+  File RefDict
+  String sampleName
+  File rawSNPs
+  command {
+    java -jar ${GATK} \
+      -T VariantFiltration \
+      -R ${RefFasta} \
+      -V ${rawSNPs} \
+      --filterExpression &quot;FS &gt; 60.0&quot; \
+      --filterName &quot;snp_filter&quot; \
+      -o ${sampleName}.filtered.snps.vcf
+  }
+  output {
+    File filteredSNPs = &quot;${sampleName}.filtered.snps.vcf&quot;
+  }
+}
+
+#As above, this task calls GATK&#39;s tool, VariantFiltration. However, this one applied filters
+#meant for indels only.
+task hardFilterIndel {
+  File GATK
+  File RefFasta
+  File RefIndex
+  File RefDict
+  String sampleName
+  File rawIndels
+  command {
+    java -jar ${GATK} \
+      -T VariantFiltration \
+      -R ${RefFasta} \
+      -V ${rawIndels} \
+      --filterExpression &quot;FS &gt; 200.0&quot; \
+      --filterName &quot;indel_filter&quot; \
+      -o ${sampleName}.filtered.indels.vcf
+  }
+  output {
+    File filteredIndels = &quot;${sampleName}.filtered.indels.vcf&quot;
+  }
+}
+
+#This task calls GATK&#39;s tool, CombineVariants. It will merge the separate SNP- and Indel-only
+#vcfs into one file.
+task combine {
+  File GATK
+  File RefFasta
+  File RefIndex
+  File RefDict
+  String sampleName
+  File filteredSNPs
+  File filteredIndels
+  command {
+    java -jar ${GATK} \
+      -T CombineVariants \
+      -R ${RefFasta} \
+      -V ${filteredSNPs} \
+      -V ${filteredIndels} \
+      --genotypemergeoption UNSORTED \
+      -o ${sampleName}.filtered.snps.indels.vcf
+  }
+  output {
+    File filteredVCF = &quot;${sampleName}.filtered.snps.indels.vcf&quot;
+  }
+}
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="single_task.html" class="btn btn-neutral float-right" title="Single-task workflow example: helloHaplotypeCaller" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="branched_workflow.html" class="btn btn-neutral float-left" title="Simple branched workflow example: SimpleVariantSelection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, lidanqing
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

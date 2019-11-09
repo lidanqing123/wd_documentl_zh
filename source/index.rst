@@ -27,7 +27,13 @@ Welcome to WDL_document_zh's documentation!
    :maxdepth: 2
    :caption: Tutorials:
 
-   tutorials/index
+   tutorials/generate_json
+   tutorials/install
+   tutorials/validate
+   tutorials/first_WDL
+   tutorials/multi
+   tutorials/variant
+   tutorials/scatter
 
 .. toctree::
    :maxdepth: 2
@@ -40,10 +46,19 @@ Welcome to WDL_document_zh's documentation!
    :maxdepth: 2
    :caption: Real Workflows:
 
+   real_workflows/scatter_operation
+   real_workflows/branched_workflow
+   real_workflows/variant_discovery
+   real_workflows/single_task
 
 .. toctree::
    :maxdepth: 2
    :caption: FAQ:
+
+   faq/runtime_parameter
+   faq/java_versions
+   faq/set_up
+   faq/execution_engines
 
 
 Indices and tables

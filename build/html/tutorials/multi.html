@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>[2] (howto)编写一个简单的多步骤工作流 &mdash; WDL_document_zh 0.1.1 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="[3] (howto)运行一个样本变量发现迷你管道" href="variant.html" />
+    <link rel="prev" title="[1] (howto) 编写运行GATK HaplotypeCaller的第一个WDL脚本" href="first_WDL.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WDL_document_zh
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">WDL User Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick/quickstart.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/structure.html">基础结构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/variables.html">添加变量</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/plumbing.html">添加管道</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/validation.html">验证语法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/inputs.html">指定输入</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick/execution.html">执行!</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="generate_json.html">(howto)生成一个描述输入的JSON文件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">(howto) 安装WDL车间的软件</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validate.html">(howto)在执行之前验证您的WDL脚本语法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_WDL.html">[1] (howto) 编写运行GATK HaplotypeCaller的第一个WDL脚本</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">[2] (howto)编写一个简单的多步骤工作流</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">介绍</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">写你自己的脚本</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#workflow">Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tasks">Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">运行管道</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">检查你的结果</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="variant.html">[3] (howto)运行一个样本变量发现迷你管道</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scatter.html">[4] (howto)使用分散-聚集联合调用基因型</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Supplement:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../supplement/plumbing_options.html">Plumbing Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supplement/components.html">Script Components</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Real Workflows:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../real_workflows/scatter_operation.html">Scatter operation example: jointCallingGenotypes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../real_workflows/branched_workflow.html">Simple branched workflow example: SimpleVariantSelection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../real_workflows/variant_discovery.html">Simple variant discovery with HaplotypeCaller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../real_workflows/single_task.html">Single-task workflow example: helloHaplotypeCaller</a></li>
+</ul>
+<p class="caption"><span class="caption-text">FAQ:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq/runtime_parameter.html">runtime参数值可以动态生成吗?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/java_versions.html">如何在同一台计算机上运行不同版本的Java ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/set_up.html">我需要设置什么来编写和执行WDL工作流?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq/execution_engines.html">哪些工作流执行引擎支持WDL?Cromwell是什么?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WDL_document_zh</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>[2] (howto)编写一个简单的多步骤工作流</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorials/multi.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="howto">
+<h1>[2] (howto)编写一个简单的多步骤工作流<a class="headerlink" href="#howto" title="永久链接至标题">¶</a></h1>
+<p><strong>Requirements</strong></p>
+<p>本演练假定您对GATK的工具有(非常)基本的了解，并且您已经阅读了入门指南。您应该已经安装了必要的工具，并学习了前面的教程，因为我们将从使用它的脚本开始。最后，您需要下载包含本教程数据的zip包。我们将使用一个玩具数据集:NA12878, 20号染色体的子集。包中的文件在随附的自述中进行了描述。</p>
+<div class="section" id="id1">
+<h2>介绍<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>在本教程中，您将学习如何向任务调用传递输入、编写分支的多步骤工作流和应用任务别名。您还将学习一个简单的技巧，以减少向一组任务输入相同数据的次数。我们将通过添加一个名为select的步骤来扩展您在前一个教程中编写的脚本。这个任务将被haplotypeCaller调用的SNP和indel变量分离到单独的文件中。这是我们偶尔需要做的事情，以不同的方式处理snp和indel，例如在对一个变量callset应用硬过滤器时。让我们看看我们的工作流程图:</p>
+<img alt="../_images/multi1.png" src="../_images/multi1.png" />
+<p>通过绘制一个类似于上面的图表来开始您的管道写作总是有用的。正如您将在接下来的小节中看到的，我们将经常引用这个图。它充当您的工作流和每个单独任务的大纲。</p>
+</div>
+<div class="section" id="id2">
+<h2>写你自己的脚本<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>将前面创建的helloHaplotypeCaller脚本复制到一个新的文本文件中，我们将其命名为simplevariantselect.wdl。</p>
+<div class="section" id="workflow">
+<h3>Workflow<a class="headerlink" href="#workflow" title="永久链接至标题">¶</a></h3>
+<p>在我们开始编写新任务之前，让我们先看看我们的工作流如何将这些任务组合在一起。在上面的图表中，您可以看到如何将haplotypeCaller的输出输入到下一步的输入中;我们将告诉Cromwell具体怎么做。我们已经有了一个简单调用haplotypeCaller步骤的工作流，现在让我们调用剩下的每个步骤:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">workflow</span> <span class="n">SimpleVariantSelection</span> <span class="p">{</span>
+  <span class="n">call</span> <span class="n">haplotypeCaller</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="p">}</span>
+  <span class="n">call</span> <span class="n">select</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="p">}</span>
+  <span class="n">call</span> <span class="n">select</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>我们的工作流根据前面的流程图对每个任务进行调用。但是，这两个相同的select调用稍后会造成麻烦。Cromwell不允许我们调用同一个任务两次，因为第二次调用会覆盖前一次生成的数据。幸运的是，我们可以使用一种叫做任务别名的东西来给任务起一个特定的名字，就像这样:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">workflow</span> <span class="n">SimpleVariantSelection</span> <span class="p">{</span>
+  <span class="n">call</span> <span class="n">haplotypeCaller</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="p">}</span>
+  <span class="n">call</span> <span class="n">select</span> <span class="k">as</span> <span class="n">selectSNPs</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="p">}</span>
+  <span class="n">call</span> <span class="n">select</span> <span class="k">as</span> <span class="n">selectIndels</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>这类似于为您的输入声明一个变量名—您只是给了该任务调用一个您可以引用它的变量名。当我们想对输出做一些事情时，我们将调用selectSNPsrawSubset，而不是selectrawSubset——但这是另一个教程的主题。</p>
+<p>接下来让我们尝试添加输入。任务haplotypeCaller是我们工作流程的起点，它需要一个输入bam。此文件将直接传递到任务，因此不需要在这里的工作流中指定它。对于剩下的任务，我们必须指定将从工作流中的前面步骤生成的输入。要指定输入，请遵循下面的格式</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>::</dt>
+<dd>input: inputname=taskname.outputname</dd>
+</dl>
+</div></blockquote>
+<p>因此，为了告诉我们的select步骤从haplotypeCaller获取rawVCF输出，我们写入input: rawVCF=haplotypeCaller.rawVCF。只需遍历每个任务调用，并按照流程图正确分配输入。</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">workflow</span> <span class="n">SimpleVariantSelection</span> <span class="p">{</span>
+  <span class="n">call</span> <span class="n">haplotypeCaller</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="p">}</span>
+  <span class="n">call</span> <span class="n">select</span> <span class="k">as</span> <span class="n">selectSNPs</span> <span class="p">{</span>
+    <span class="nb">input</span><span class="p">:</span>
+      <span class="nb">type</span><span class="o">=</span><span class="p">,</span>
+      <span class="n">rawVCF</span><span class="o">=</span><span class="n">haplotypeCaller</span><span class="o">.</span><span class="n">rawVCF</span>
+  <span class="p">}</span>
+  <span class="n">call</span> <span class="n">select</span> <span class="k">as</span> <span class="n">selectIndels</span> <span class="p">{</span>
+    <span class="nb">input</span><span class="p">:</span>
+      <span class="nb">type</span><span class="o">=</span><span class="p">,</span>
+      <span class="n">rawVCF</span><span class="o">=</span><span class="n">haplotypeCaller</span><span class="o">.</span><span class="n">rawVCF</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>该任务select有一个名为type的输入，它不接受任何早期步骤的输入。只需传入一个字符串，就可以将类型指定为INDEL或SNP。</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">workflow</span> <span class="n">SimpleVariantSelection</span> <span class="p">{</span>
+  <span class="n">call</span> <span class="n">haplotypeCaller</span> <span class="p">{</span> <span class="nb">input</span><span class="p">:</span> <span class="p">}</span>
+  <span class="n">call</span> <span class="n">select</span> <span class="k">as</span> <span class="n">selectSNPs</span> <span class="p">{</span>
+    <span class="nb">input</span><span class="p">:</span>
+      <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;SNP&quot;</span><span class="p">,</span>
+      <span class="n">rawVCF</span><span class="o">=</span><span class="n">haplotypeCaller</span><span class="o">.</span><span class="n">rawVCF</span>
+  <span class="p">}</span>
+  <span class="n">call</span> <span class="n">select</span> <span class="k">as</span> <span class="n">selectIndels</span> <span class="p">{</span>
+    <span class="nb">input</span><span class="p">:</span>
+      <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;INDEL&quot;</span><span class="p">,</span>
+      <span class="n">rawVCF</span><span class="o">=</span><span class="n">haplotypeCaller</span><span class="o">.</span><span class="n">rawVCF</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>现在，所有的输入都分配好了，工作流程应该完成了，对吗?不完全是——每个任务都需要一些变量。最初，我们在haplotypeCaller任务定义中声明了这些变量，但是现在我们将设置传递变量。我们在haplotypeCaller中没有做任何更改，但是我们将在工作流中声明额外的变量，并将这些变量作为输入传递给每个命令，如下所示。这样，当我们生成输入文件时，我们只需要告诉Cromwell工具、参考文件和样本名称在什么地方。如果你曾经见过一个蹒跚学步的孩子，你就会知道一遍又一遍的回答同一个问题是多么的乏味。</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">workflow</span> <span class="n">SimpleVariantSelection</span> <span class="p">{</span>
+  <span class="n">File</span> <span class="n">gatk</span>
+  <span class="n">File</span> <span class="n">refFasta</span>
+  <span class="n">File</span> <span class="n">refIndex</span>
+  <span class="n">File</span> <span class="n">refDict</span>
+  <span class="n">String</span> <span class="n">name</span>
+
+  <span class="n">call</span> <span class="n">haplotypeCaller</span> <span class="p">{</span>
+    <span class="nb">input</span><span class="p">:</span>
+      <span class="n">sampleName</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+      <span class="n">RefFasta</span><span class="o">=</span><span class="n">refFasta</span><span class="p">,</span>
+      <span class="n">GATK</span><span class="o">=</span><span class="n">gatk</span><span class="p">,</span>
+      <span class="n">RefIndex</span><span class="o">=</span><span class="n">refIndex</span><span class="p">,</span>
+      <span class="n">RefDict</span><span class="o">=</span><span class="n">refDict</span>
+  <span class="p">}</span>
+  <span class="n">call</span> <span class="n">select</span> <span class="k">as</span> <span class="n">selectSNPs</span> <span class="p">{</span>
+    <span class="nb">input</span><span class="p">:</span>
+      <span class="n">sampleName</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+      <span class="n">RefFasta</span><span class="o">=</span><span class="n">refFasta</span><span class="p">,</span>
+      <span class="n">GATK</span><span class="o">=</span><span class="n">gatk</span><span class="p">,</span>
+      <span class="n">RefIndex</span><span class="o">=</span><span class="n">refIndex</span><span class="p">,</span>
+      <span class="n">RefDict</span><span class="o">=</span><span class="n">refDict</span><span class="p">,</span>
+      <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;SNP&quot;</span><span class="p">,</span>
+      <span class="n">rawVCF</span><span class="o">=</span><span class="n">haplotypeCaller</span><span class="o">.</span><span class="n">rawVCF</span>
+  <span class="p">}</span>
+  <span class="n">call</span> <span class="n">select</span> <span class="k">as</span> <span class="n">selectIndels</span> <span class="p">{</span>
+    <span class="nb">input</span><span class="p">:</span>
+      <span class="n">sampleName</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+      <span class="n">RefFasta</span><span class="o">=</span><span class="n">refFasta</span><span class="p">,</span>
+      <span class="n">GATK</span><span class="o">=</span><span class="n">gatk</span><span class="p">,</span>
+      <span class="n">RefIndex</span><span class="o">=</span><span class="n">refIndex</span><span class="p">,</span>
+      <span class="n">RefDict</span><span class="o">=</span><span class="n">refDict</span><span class="p">,</span>
+      <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;INDEL&quot;</span><span class="p">,</span>
+      <span class="n">rawVCF</span><span class="o">=</span><span class="n">haplotypeCaller</span><span class="o">.</span><span class="n">rawVCF</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>就是这样!您的工作流程已经完成。</p>
+</div>
+<div class="section" id="tasks">
+<h3>Tasks<a class="headerlink" href="#tasks" title="永久链接至标题">¶</a></h3>
+<p><strong>haplotypeCaller</strong></p>
+<p>如果您还没有编写这个任务，请参考前面的教程了解如何编写它。</p>
+<p><strong>select</strong></p>
+<p>这个任务使用GATK的selectvariant来在vcf中从snp中分离indel。首先，建立一个大纲，包括所需的部分存根和传递变量:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="n">select</span> <span class="p">{</span>
+  <span class="n">File</span> <span class="n">GATK</span>
+  <span class="n">File</span> <span class="n">RefFasta</span>
+  <span class="n">File</span> <span class="n">RefIndex</span>
+  <span class="n">File</span> <span class="n">RefDict</span>
+  <span class="n">String</span> <span class="n">sampleName</span>
+
+  <span class="n">command</span> <span class="p">{}</span>
+  <span class="n">output</span> <span class="p">{}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>在我们的初始图之后，我们需要向这个任务添加两个输入:字符串类型和文件rawVCF。对于我们的命令，我们将像在命令行上那样调用selectvariant，但是像以前那样插入变量。命令是这样的:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>java -jar ${GATK} \
+  -T SelectVariants \
+  -R ${RefFasta} \
+  -V ${rawVCF} \
+  -selectType ${type} \
+  -o ${sampleName}_raw.${type}.vcf
+</pre></div>
+</div>
+</div></blockquote>
+<p>这项任务的最后一项工作是将selectvariables的output分配给一个变量rawSubset。我们遵循与之前相同的格式，Type outputVariable = ” output_from_command “，你可以在我们完成的任务中看到:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>task select {
+  File GATK
+  File RefFasta
+  File RefIndex
+  File RefDict
+  String sampleName
+  String type
+  File rawVCF
+
+  command {
+    java -jar ${GATK} \
+      -T SelectVariants \
+      -R ${RefFasta} \
+      -V ${rawVCF} \
+      -selectType ${type} \
+      -o ${sampleName}_raw.${type}.vcf
+  }
+  output {
+    File rawSubset = &quot;${sampleName}_raw.${type}.vcf&quot;
+  }
+}
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="id3">
+<h3>运行管道<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
+<p>正如我们在第一个教程中所做的，在运行WDL脚本以捕获任何愚蠢的语法错误之前，最好先验证它。下一步是生成一个输入文件。我们使用下面的命令来完成，然后使用我们喜欢的文本编辑器在simpleVariantSelection_inputs.json中填充输入。如果您不知道哪个文件是包中的哪个文件，不要忘记检查README文件。</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">java</span> <span class="o">-</span><span class="n">jar</span> <span class="n">wdltool</span><span class="o">.</span><span class="n">jar</span> <span class="n">inputs</span> <span class="n">simpleVariantSelection</span><span class="o">.</span><span class="n">wdl</span> <span class="o">&gt;</span> <span class="n">simpleVariantSelection_inputs</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>有了你完成的输入文件，你现在可以在本地运行你的脚本(即在你自己的电脑上)。我们将使用以下命令运行:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">java</span> <span class="o">-</span><span class="n">jar</span> <span class="n">cromwell</span><span class="o">.</span><span class="n">jar</span> <span class="n">run</span> <span class="n">simpleVariantSelection</span><span class="o">.</span><span class="n">wdl</span> <span class="n">simpleVariantSelection_inputs</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>当你这样做，Cromwell应该开始显示更新信息在您的终端，直到工作流程完成。</p>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>检查你的结果<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
+<p>如果一切都做对了，Cromwell将完成并显示每一步输出的路径。我们的管道已经接受了预处理的bam文件，并用haplotypeCaller call变异。然后，我们将变异分为snp和indel。让我们检查一个输出SimpleVariantSelection.selectIndels.rawSubset。最简单的方法是将vcf看作一个文本文件，或者使用终端中的more命令，或者在文本编辑器中打开该文件。(语法: more &lt;filename&gt;)</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#CHROM  POS ID  REF ALT QUAL  FILTER  INFO  FORMAT  NA12878</span>
+<span class="mi">20</span>  <span class="mi">9999996</span> <span class="o">.</span> <span class="n">A</span> <span class="n">ACT</span> <span class="mf">534.73</span>  <span class="o">.</span> <span class="n">AC</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">AF</span><span class="o">=</span><span class="mf">1.00</span><span class="p">;</span><span class="n">AN</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">DP</span><span class="o">=</span><span class="mi">12</span><span class="p">;</span><span class="n">FS</span><span class="o">=</span><span class="mf">0.000</span><span class="p">;</span><span class="n">MLEAC</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">MLEAF</span><span class="o">=</span><span class="mf">1.00</span><span class="p">;</span><span class="n">MQ</span><span class="o">=</span><span class="mf">60.00</span><span class="p">;</span><span class="n">QD</span><span class="o">=</span><span class="mf">25.82</span><span class="p">;</span><span class="n">SOR</span><span class="o">=</span><span class="mf">5.136</span> <span class="n">GT</span><span class="p">:</span><span class="n">AD</span><span class="p">:</span><span class="n">DP</span><span class="p">:</span><span class="n">GQ</span><span class="p">:</span><span class="n">PL</span>  <span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">:</span><span class="mi">12</span><span class="p">:</span><span class="mi">39</span><span class="p">:</span><span class="mi">572</span><span class="p">,</span><span class="mi">39</span><span class="p">,</span><span class="mi">0</span>
+<span class="mi">20</span>  <span class="mi">10001436</span>  <span class="o">.</span> <span class="n">A</span> <span class="n">AAGGCT</span>  <span class="mf">1222.73</span> <span class="o">.</span> <span class="n">AC</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">AF</span><span class="o">=</span><span class="mf">1.00</span><span class="p">;</span><span class="n">AN</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">DP</span><span class="o">=</span><span class="mi">29</span><span class="p">;</span><span class="n">FS</span><span class="o">=</span><span class="mf">0.000</span><span class="p">;</span><span class="n">MLEAC</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">MLEAF</span><span class="o">=</span><span class="mf">1.00</span><span class="p">;</span><span class="n">MQ</span><span class="o">=</span><span class="mf">60.00</span><span class="p">;</span><span class="n">QD</span><span class="o">=</span><span class="mf">32.17</span><span class="p">;</span><span class="n">SOR</span><span class="o">=</span><span class="mf">0.836</span> <span class="n">GT</span><span class="p">:</span><span class="n">AD</span><span class="p">:</span><span class="n">DP</span><span class="p">:</span><span class="n">GQ</span><span class="p">:</span><span class="n">PL</span>  <span class="mi">1</span><span class="o">/</span><span class="mi">1</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="mi">28</span><span class="p">:</span><span class="mi">28</span><span class="p">:</span><span class="mi">84</span><span class="p">:</span><span class="mi">1260</span><span class="p">,</span><span class="mi">84</span><span class="p">,</span><span class="mi">0</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>诚然，它不是最容易读的。列标题是第一行，后面的每一行是单个变体站点上的信息。如果您愿意，GATK有一个工具VariantsToTable，用于将感兴趣的注释提取成更可读的格式。生成的.table文件可以在RStudio、Matlab或Excel中打开。您可以在本文附带的.zip包中找到.table输出(其中显示了所有注释)，或者查看下面的预览。</p>
+<img alt="../_images/multi2.png" src="../_images/multi2.png" />
+<p>现在花点时间自我表扬一下。您已经构建了一个多步骤的工作流，并且您正在编写整个管道的路上!在您的旅程中继续添加一些任务，并在下一个教程中学习工作流管道的合并部分。</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="variant.html" class="btn btn-neutral float-right" title="[3] (howto)运行一个样本变量发现迷你管道" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="first_WDL.html" class="btn btn-neutral float-left" title="[1] (howto) 编写运行GATK HaplotypeCaller的第一个WDL脚本" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, lidanqing
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
